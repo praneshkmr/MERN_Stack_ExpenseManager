@@ -158,22 +158,32 @@ var ExpenseList = React.createClass({
                 );
             }
         });
-        return(
-            <div>
-                <h1>Expenses</h1>
-                <table className='table table-striped'>
-                    <tbody>
-                        <tr>
-                            <th>Date (mm/dd/yyyy)</th>
-                            <th>Title</th>
-                            <th>Amount</th>
-                            <th>Options</th>
-                        </tr>
-                        {ExpenseNodes}
-                    </tbody>
-                </table>
-            </div>
-        );
+        if ( ExpenseNodes.length > 0 ){
+            return(
+                <div>
+                    <h1>Expenses</h1>
+                    <table className='table table-striped'>
+                        <tbody>
+                            <tr>
+                                <th>Date (mm/dd/yyyy)</th>
+                                <th>Title</th>
+                                <th>Amount</th>
+                                <th>Options</th>
+                            </tr>
+                            {ExpenseNodes}
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+        else{
+            return(
+                <div>
+                    <h1>Expenses</h1>
+                    No Expenses Found. Please Add One.
+                </div>
+            );
+        }
     }
 });
 
