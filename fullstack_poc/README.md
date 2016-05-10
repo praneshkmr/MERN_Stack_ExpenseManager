@@ -20,4 +20,4 @@ $ npm start
 
 to Start the Web Application.
 
-The Application runs on port 3000 in [localhost](https://localhost:3000/)
+The Application runs on port 3000 in [localhost](http://localhost:3000/)
