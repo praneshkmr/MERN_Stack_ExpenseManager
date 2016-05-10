@@ -1,19 +1,33 @@
-
-var data = [
-  { id: 1, title: "Salary", amount : 100000, date : "01-05-2016" },
-  { id: 2, title: "Education Loan", amount : -6000, date : "02-05-2016" }
-];
-
 var ExpenseManager = React.createClass({
     handleExpenseSubmit: function (expense) {
-        
+        console.log(expense);
+    },
+    loadExpensesFromServer: function() {
+        $.ajax({
+        url: this.props.url,
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            this.setState({data: data});
+        }.bind(this),
+        error: function(xhr, status, err) {
+            console.error(this.props.url, status, err.toString());
+        }.bind(this)
+        });
+    },
+    getInitialState: function() {
+        return {data: []};
+    },
+    componentDidMount: function() {
+        this.loadExpensesFromServer();
+        setInterval(this.loadExpensesFromServer, this.props.pollInterval);
     },
     render: function(){
         return (
             <div className='container'>
-                <ExpenseDashBoard className='row' data={this.props.data}/>
-                <AddExpense className='row'/>
-                <ExpenseList className='row' data={this.props.data}/>
+                <ExpenseDashBoard className='row' data={this.state.data}/>
+                <AddExpense className='row' onClickAddExpense={this.handleExpenseSubmit}/>
+                <ExpenseList className='row' data={this.state.data}/>
             </div>
         );
     }
@@ -24,8 +38,8 @@ var ExpenseDashBoard = React.createClass({
         return(
             <div>
                 Expense Dashboard View
-             </div>
-            );
+            </div>
+        );
     }
 });
 
@@ -33,7 +47,7 @@ var ExpenseList = React.createClass({
     render: function(){
         var ExpenseNodes = this.props.data.map(function (expense) {
             return(
-                <Expense data={expense} key={expense.id}></Expense>
+                <Expense data={expense} key={expense._id}></Expense>
             );
         });
         return(
@@ -73,7 +87,6 @@ var AddExpense = React.createClass({
         this.setState({ title : e.target.value });
     },
     handleSubmit: function (e) {
-        console.log("Submit Handle");
         e.preventDefault();
         var date = this.state.date.trim();
         var amount = this.state.amount.trim();
@@ -81,7 +94,7 @@ var AddExpense = React.createClass({
         if(!date || !amount || !title){
             return;
         }
-        //this.
+        this.props.onClickAddExpense({ date:date, amount:amount, title:title });
         this.setState({ date:'', amount:'', title:'' });
     },
     render: function () {
@@ -111,4 +124,4 @@ var Expense = React.createClass({
     }
 });
 
-ReactDOM.render(<ExpenseManager data={data}/>, document.getElementById("content"));
+ReactDOM.render(<ExpenseManager url="/expenses" pollInterval="1000"/>, document.getElementById("content"));
