@@ -29,6 +29,21 @@ var ExpenseManager = React.createClass({
             }.bind(this)
         });
     },
+    updateExpense: function (expense) {
+        expense.user = "5731fcbe22ff331782516793";
+        $.ajax({
+            url: this.props.url + '/' + expense._id,
+            dataType: 'json',
+            type: 'PUT',
+            data: expense,
+            success: function(newExpense) {
+                this.loadExpensesFromServer();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
     getInitialState: function() {
         return {data: []};
     },
@@ -41,7 +56,7 @@ var ExpenseManager = React.createClass({
             <div className='container'>
                 <ExpenseDashBoard className='row' data={this.state.data}/>
                 <AddExpense className='row' onClickAddExpense={this.handleExpenseSubmit}/>
-                <ExpenseList className='row' data={this.state.data}/>
+                <ExpenseList className='row' data={this.state.data} onExpenseUpdate={this.updateExpense}/>
             </div>
         );
     }
@@ -93,11 +108,39 @@ var ExpenseDashBoard = React.createClass({
 });
 
 var ExpenseList = React.createClass({
+    getInitialState: function(){
+        return {
+            expenseInUpdateMode : []
+        };
+    },
+    setExpenseToUpdateMode: function(expense){
+        var expenseInUpdateMode = this.state.expenseInUpdateMode;
+        expenseInUpdateMode.push(expense._id);
+        this.setState({ expenseInUpdateMode : expenseInUpdateMode });
+    },
+    unsetExpenseToUpdateMode: function(expense){
+        var expenseInUpdateMode = this.state.expenseInUpdateMode;
+        var index = expenseInUpdateMode.indexOf(expense._id);
+        expenseInUpdateMode.splice(index, 1);
+        this.setState({ expenseInUpdateMode : expenseInUpdateMode });
+    },
+    updateExpense: function(expense){
+        this.props.onExpenseUpdate(expense);
+        this.unsetExpenseToUpdateMode(expense);
+    },
     render: function(){
+        var that = this;
         var ExpenseNodes = this.props.data.map(function (expense) {
-            return(
-                <Expense data={expense} key={expense._id}></Expense>
-            );
+            if( that.state.expenseInUpdateMode.indexOf(expense._id) != -1 ){
+                return(
+                    <ExpenseUpdate data={expense} key={expense._id} onExpenseUpdate={that.updateExpense}></ExpenseUpdate>
+                );
+            }
+            else {
+                return(
+                    <Expense data={expense} key={expense._id} onExpenseEditClick={that.setExpenseToUpdateMode.bind(that, expense)}></Expense>
+                );
+            }
         });
         return(
             <div>
@@ -108,6 +151,7 @@ var ExpenseList = React.createClass({
                             <th>Date</th>
                             <th>Title</th>
                             <th>Amount</th>
+                            <th>Options</th>
                         </tr>
                         {ExpenseNodes}
                     </tbody>
@@ -124,6 +168,41 @@ var Expense = React.createClass({
                 <td>{this.props.data.date}</td>
                 <td>{this.props.data.title}</td>
                 <td>{this.props.data.amount}</td>
+                <td><button type="submit" className="btn btn-default" onClick={this.props.onExpenseEditClick}>Edit</button></td>
+            </tr>
+        );
+    }
+});
+
+var ExpenseUpdate = React.createClass({
+    getInitialState: function () {
+        var expense = {
+            date : this.props.data.date,
+            title: this.props.data.title,
+            amount: this.props.data.amount,
+            _id: this.props.data._id
+        };
+        return expense;
+    },
+    handleDateChange: function (e) {
+        this.setState({ date : e.target.value });
+    },
+    handleAmountChange: function (e) {
+        this.setState({ amount : e.target.value });
+    },
+    handleTitleChange: function (e) {
+        this.setState({ title : e.target.value });
+    },
+    updateExpense: function(){
+        this.props.onExpenseUpdate(this.state);
+    },
+    render:function () {
+        return(
+            <tr>
+                <td><input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date"/></td>
+                <td><input className="form-control" value={this.state.title} onChange={this.handleTitleChange} placeholder="Title"/></td>
+                <td><input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/></td>
+                <td><button type="submit" className="btn btn-default" onClick={this.updateExpense}>Update</button></td>
             </tr>
         );
     }

@@ -23,6 +23,10 @@ expenseDAO.prototype.getExpense = function(_id, user, callback){
   ExpenseModel.find({ "_id" : _id,  "isDeleted" : false }, callback);
 };
 
+expenseDAO.prototype.updateExpense = function(_id, user, data, callback){
+  ExpenseModel.findOneAndUpdate({ "_id" : _id,  "isDeleted" : false }, data, callback);
+};
+
 expenseDAO.prototype.deleteExpense = function(_id, user, callback){
   ExpenseModel.findOneAndUpdate({ "_id" : _id,  "isDeleted" : false }, {"isDeleted" : true }, callback);
 };

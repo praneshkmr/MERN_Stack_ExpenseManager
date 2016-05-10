@@ -56,6 +56,24 @@ router.post('/', function (req, res, next) {
   }
 });
 
+router.put('/:id', function(req, res, next) {
+  if(req.params.id) {
+    var expenseId = req.params.id;
+    expenseDAO.updateExpense(expenseId,"", req.body, function (err, expense) {
+      if (err){ 
+        console.error(err);
+        res.status(500).send(err);
+      }
+      else{
+        res.send(expense);
+      }
+    });
+  }
+  else{
+    res.status(400).send('Expense ID is required');
+  }
+});
+
 router.delete('/:id', function(req, res, next) {
   if(req.params.id) {
     var expenseId = req.params.id;
