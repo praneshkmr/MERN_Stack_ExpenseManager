@@ -1,13 +1,15 @@
 var ExpenseManager = React.createClass({
     handleExpenseSubmit: function (expense) {
-        expense.user = "5731881c6f68092d48554fda";
+        expense.user = "5731fcbe22ff331782516793";
         $.ajax({
             url: this.props.url,
             dataType: 'json',
             type: 'POST',
             data: expense,
-            success: function(data) {
-                this.setState({data: data});
+            success: function(newExpense) {
+                var expenses = this.state.data;
+                var newExpenses = expenses.concat([newExpense]);
+                this.setState({ data: newExpenses });
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -47,9 +49,44 @@ var ExpenseManager = React.createClass({
 
 var ExpenseDashBoard = React.createClass({
     render: function(){
+        var credit = 0, debit = 0, balance = 0;
+        this.props.data.map(function (expense) {
+            var amount = parseInt(expense.amount);
+            if(amount > 0){
+                credit += amount;
+            }
+            else if(amount < 0){
+                debit += amount;
+            }
+           balance = credit + debit;
+        });
         return(
             <div>
-                Expense Dashboard View
+                <h1>Expense Dashboard</h1>
+                <div className="col-md-4">
+                    <div className="panel panel-success">
+                        <div className="panel-heading">
+                            <h3 className="panel-title">Credit</h3>
+                        </div>
+                        <div className="panel-body">{credit}</div>
+                    </div>
+                </div>
+                <div className="col-md-4">
+                    <div className="panel panel-danger">
+                        <div className="panel-heading">
+                            <h3 className="panel-title">Debit</h3>
+                        </div>
+                        <div className="panel-body">{debit}</div>
+                    </div>
+                </div>
+                <div className="col-md-4">
+                    <div className="panel panel-info">
+                        <div className="panel-heading">
+                            <h3 className="panel-title">Balance</h3>
+                        </div>
+                        <div className="panel-body">{balance}</div>
+                    </div>
+                </div>
             </div>
         );
     }
