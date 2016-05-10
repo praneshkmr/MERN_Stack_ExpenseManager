@@ -149,7 +149,7 @@ var ExpenseList = React.createClass({
         var ExpenseNodes = this.props.data.map(function (expense) {
             if( that.state.expenseInUpdateMode.indexOf(expense._id) != -1 ){
                 return(
-                    <ExpenseUpdate data={expense} key={expense._id} onExpenseUpdate={that.updateExpense}></ExpenseUpdate>
+                    <ExpenseUpdate data={expense} key={expense._id} onSetExpenseUpdateMode={that.updateExpense} onUnSetExpenseUpdateMode={that.unsetExpenseToUpdateMode}></ExpenseUpdate>
                 );
             }
             else {
@@ -211,7 +211,10 @@ var ExpenseUpdate = React.createClass({
         this.setState({ title : e.target.value });
     },
     updateExpense: function(){
-        this.props.onExpenseUpdate(this.state);
+        this.props.onSetExpenseUpdateMode(this.state);
+    },
+    cancelUpdateExpense: function(){
+        this.props.onUnSetExpenseUpdateMode(this.state);
     },
     render:function () {
         return(
@@ -220,6 +223,7 @@ var ExpenseUpdate = React.createClass({
                 <td><input className="form-control" value={this.state.title} onChange={this.handleTitleChange} placeholder="Title"/></td>
                 <td><input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/></td>
                 <td><button type="submit" className="btn btn-default" onClick={this.updateExpense}>Update</button></td>
+                <td><button type="submit" className="btn btn-danger" onClick={this.cancelUpdateExpense}>Cancel</button></td>
             </tr>
         );
     }
