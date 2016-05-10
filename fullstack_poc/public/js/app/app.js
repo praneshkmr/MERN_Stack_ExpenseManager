@@ -149,11 +149,20 @@ var AddExpense = React.createClass({
     render: function () {
         return(
             <div>
-                <h1>Add Expense</h1>
-                <form onSubmit={this.handleSubmit}>
-                    <input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date"/>
-                    <input className="form-control" value={this.state.title} onChange={this.handleTitleChange} placeholder="Title"/>
-                    <input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/>
+                <h1>Add Expense</h1>                
+                <form className="form-inline" onSubmit={this.handleSubmit}>
+                    <div className="form-group">
+                        <label className="sr-only">Date</label>
+                        <input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date"/>
+                    </div>
+                    <div className="form-group">
+                        <label className="sr-only">Title</label>
+                        <input className="form-control" value={this.state.title} onChange={this.handleTitleChange} placeholder="Title"/>
+                    </div>
+                    <div className="form-group">
+                        <label className="sr-only">Amount</label>
+                        <input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/>
+                    </div>
                     <button type="submit" className="btn btn-primary">Add Expense</button>
                 </form>
             </div>
