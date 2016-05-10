@@ -1,0 +1,11 @@
+{
+  "name": "weinvestprogtest",
+  "version": "1.0.0",
+  "description": "Program Test for WeInvest",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "praneshkmr@gmail.com",
+  "license": "ISC"
+}
