@@ -24,6 +24,7 @@ expenseDAO.prototype.getExpense = function(_id, user, callback){
 };
 
 expenseDAO.prototype.updateExpense = function(_id, user, data, callback){
+  data.updated_at = new Date();
   ExpenseModel.findOneAndUpdate({ "_id" : _id,  "isDeleted" : false }, data, callback);
 };
 
