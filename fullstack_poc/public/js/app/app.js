@@ -44,6 +44,19 @@ var ExpenseManager = React.createClass({
             }.bind(this)
         });
     },
+    deleteExpense: function (expense) {
+        expense.user = "5731fcbe22ff331782516793";
+        $.ajax({
+            url: this.props.url + '/' + expense._id,
+            type: 'DELETE',
+            success: function(newExpense) {
+                this.loadExpensesFromServer();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
     getInitialState: function() {
         return {data: []};
     },
@@ -56,7 +69,7 @@ var ExpenseManager = React.createClass({
             <div className='container'>
                 <ExpenseDashBoard className='row' data={this.state.data}/>
                 <AddExpense className='row' onClickAddExpense={this.handleExpenseSubmit}/>
-                <ExpenseList className='row' data={this.state.data} onExpenseUpdate={this.updateExpense}/>
+                <ExpenseList className='row' data={this.state.data} onExpenseUpdate={this.updateExpense} onExpenseDelete={this.deleteExpense}/>
             </div>
         );
     }
@@ -128,6 +141,9 @@ var ExpenseList = React.createClass({
         this.props.onExpenseUpdate(expense);
         this.unsetExpenseToUpdateMode(expense);
     },
+    deleteExpense: function(expense){
+        this.props.onExpenseDelete(expense);
+    },
     render: function(){
         var that = this;
         var ExpenseNodes = this.props.data.map(function (expense) {
@@ -138,7 +154,7 @@ var ExpenseList = React.createClass({
             }
             else {
                 return(
-                    <Expense data={expense} key={expense._id} onExpenseEditClick={that.setExpenseToUpdateMode.bind(that, expense)}></Expense>
+                    <Expense data={expense} key={expense._id} onExpenseEditClick={that.setExpenseToUpdateMode.bind(that, expense)} onExpenseDeleteClick={that.deleteExpense.bind(that, expense)}></Expense>
                 );
             }
         });
@@ -169,6 +185,7 @@ var Expense = React.createClass({
                 <td>{this.props.data.title}</td>
                 <td>{this.props.data.amount}</td>
                 <td><button type="submit" className="btn btn-default" onClick={this.props.onExpenseEditClick}>Edit</button></td>
+                <td><button type="submit" className="btn btn-danger" onClick={this.props.onExpenseDeleteClick}>Delete</button></td>
             </tr>
         );
     }
