@@ -5,12 +5,15 @@ var data = [
 ];
 
 var ExpenseManager = React.createClass({
+    handleExpenseSubmit: function (expense) {
+        
+    },
     render: function(){
         return (
-            <div>
-                <ExpenseDashBoard data={this.props.data}/>
-                <AddExpense />
-                <ExpenseList data={this.props.data}/>
+            <div className='container'>
+                <ExpenseDashBoard className='row' data={this.props.data}/>
+                <AddExpense className='row'/>
+                <ExpenseList className='row' data={this.props.data}/>
             </div>
         );
     }
@@ -35,7 +38,8 @@ var ExpenseList = React.createClass({
         });
         return(
             <div>
-                <table>
+                <h1>Expenses</h1>
+                <table className='table table-striped'>
                     <tbody>
                         <tr>
                             <th>Date</th>
@@ -51,8 +55,47 @@ var ExpenseList = React.createClass({
 });
 
 var AddExpense = React.createClass({
+    getInitialState: function () {
+        var newExpense = {
+            date : '',
+            title: '',
+            amount: ''
+        };
+        return newExpense;
+    },
+    handleDateChange: function (e) {
+        this.setState({ date : e.target.value });
+    },
+    handleAmountChange: function (e) {
+        this.setState({ amount : e.target.value });
+    },
+    handleTitleChange: function (e) {
+        this.setState({ title : e.target.value });
+    },
+    handleSubmit: function (e) {
+        console.log("Submit Handle");
+        e.preventDefault();
+        var date = this.state.date.trim();
+        var amount = this.state.amount.trim();
+        var title = this.state.title.trim();
+        if(!date || !amount || !title){
+            return;
+        }
+        //this.
+        this.setState({ date:'', amount:'', title:'' });
+    },
     render: function () {
-        return(<div>Add Expense View</div>);
+        return(
+            <div>
+                <h1>Add Expense</h1>
+                <form onSubmit={this.handleSubmit}>
+                    <input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date"/>
+                    <input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/>
+                    <input className="form-control" value={this.state.title} onChange={this.handleTitleChange} placeholder="Title"/>
+                    <button type="submit" className="btn btn-primary">Add Expense</button>
+                </form>
+            </div>
+        );
     }
 });
 
