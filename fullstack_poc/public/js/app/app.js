@@ -152,8 +152,8 @@ var AddExpense = React.createClass({
                 <h1>Add Expense</h1>
                 <form onSubmit={this.handleSubmit}>
                     <input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date"/>
-                    <input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/>
                     <input className="form-control" value={this.state.title} onChange={this.handleTitleChange} placeholder="Title"/>
+                    <input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/>
                     <button type="submit" className="btn btn-primary">Add Expense</button>
                 </form>
             </div>
