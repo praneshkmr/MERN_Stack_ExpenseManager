@@ -6,6 +6,7 @@ var ExpenseSchema = mongoose.Schema({
     date: Date,
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now },
-    user: mongoose.Schema.Types.ObjectId
+    user: mongoose.Schema.Types.ObjectId,
+    isDeleted : { type: Boolean, default: false }
 });
 var ExpenseModel = mongoose.model('ExpenseModel', ExpenseSchema);

@@ -15,11 +15,15 @@ expenseDAO.prototype.addExpense = function(title, amount, date, callback){
 };
 
 expenseDAO.prototype.getAllExpense = function(user, callback){
-  ExpenseModel.find({}, callback);
+  ExpenseModel.find({ "isDeleted" : false }, callback);
 };
 
 expenseDAO.prototype.getExpense = function(_id, user, callback){
-  ExpenseModel.find({ "_id" : _id }, callback);
+  ExpenseModel.find({ "_id" : _id,  "isDeleted" : false }, callback);
+};
+
+expenseDAO.prototype.deleteExpense = function(_id, user, callback){
+  ExpenseModel.findOneAndUpdate({ "_id" : _id,  "isDeleted" : false }, {"isDeleted" : true }, callback);
 };
 
 module.exports = expenseDAO;
