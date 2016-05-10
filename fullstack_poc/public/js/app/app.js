@@ -117,6 +117,18 @@ var ExpenseList = React.createClass({
     }
 });
 
+var Expense = React.createClass({
+    render:function () {
+        return(
+            <tr>
+                <td>{this.props.data.date}</td>
+                <td>{this.props.data.title}</td>
+                <td>{this.props.data.amount}</td>
+            </tr>
+        );
+    }
+});
+
 var AddExpense = React.createClass({
     getInitialState: function () {
         var newExpense = {
@@ -166,18 +178,6 @@ var AddExpense = React.createClass({
                     <button type="submit" className="btn btn-primary">Add Expense</button>
                 </form>
             </div>
-        );
-    }
-});
-
-var Expense = React.createClass({
-    render:function () {
-        return(
-            <tr>
-                <td>{this.props.data.date}</td>
-                <td>{this.props.data.title}</td>
-                <td>{this.props.data.amount}</td>
-            </tr>
         );
     }
 });
