@@ -5,11 +5,12 @@ var expenseDAO = function () {
     
 };
 
-expenseDAO.prototype.addExpense = function(title, amount, date, callback){
+expenseDAO.prototype.addExpense = function(title, amount, date, user, callback){
   var expense = new ExpenseModel({
-    title : "First Title",
-    amount : 100,
-    date : new Date().now
+    title : title,
+    amount : amount,
+    date : date,
+    user : user
   });
   expense.save(callback);
 };

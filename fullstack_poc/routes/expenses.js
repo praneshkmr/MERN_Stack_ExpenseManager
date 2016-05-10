@@ -36,18 +36,24 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-  var title = "First Title",
-    amount = 100,
-    date = new Date().now;
-  expenseDAO.addExpense(title, amount, date, function (err, expense) {
-    if (err){ 
-      console.error(err);
-      res.send(err);
+  if(req.body.title && req.body.amount && req.body.date && req.body.user) {
+    var title = req.body.title,
+      amount = req.body.amount,
+      date = req.body.date,
+      user = req.body.user;
+    expenseDAO.addExpense(title, amount, date, user, function (err, expense) {
+      if (err){ 
+        console.error(err);
+        res.send(err);
+      }
+      else{
+        res.send(expense);
+      };
+    });
     }
-    else{
-      res.send(expense);
-    };
-  });
+  else{
+    res.status(400).send('Title, Amount and Date is required');
+  }
 });
 
 router.delete('/:id', function(req, res, next) {
