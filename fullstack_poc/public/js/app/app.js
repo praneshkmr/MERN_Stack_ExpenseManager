@@ -1,18 +1,30 @@
 var ExpenseManager = React.createClass({
     handleExpenseSubmit: function (expense) {
-        console.log(expense);
+        expense.user = "5731881c6f68092d48554fda";
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'POST',
+            data: expense,
+            success: function(data) {
+                this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
     },
     loadExpensesFromServer: function() {
         $.ajax({
-        url: this.props.url,
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            this.setState({data: data});
-        }.bind(this),
-        error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-        }.bind(this)
+            url: this.props.url,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
         });
     },
     getInitialState: function() {
@@ -124,4 +136,4 @@ var Expense = React.createClass({
     }
 });
 
-ReactDOM.render(<ExpenseManager url="/expenses" pollInterval="1000"/>, document.getElementById("content"));
+ReactDOM.render(<ExpenseManager url="/expenses" pollInterval="3000"/>, document.getElementById("content"));
