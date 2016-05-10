@@ -1,6 +1,22 @@
 var ExpenseManager = React.createClass({
     render: function(){
-        return (<div>Expense Manager View</div>);
+        return (
+            <div>
+                <ExpenseDashBoard />
+                <AddExpense />
+                <ExpenseList />
+            </div>
+        );
+    }
+});
+
+var ExpenseDashBoard = React.createClass({
+    render: function(){
+        return(
+            <div>
+                Expense Dashboard View
+             </div>
+            );
     }
 });
 
