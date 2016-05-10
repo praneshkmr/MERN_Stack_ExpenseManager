@@ -5,6 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Mongoose Setup
+var mongoose = require('mongoose');
+require('./dao/mongo/mongooseSchema');
+mongoose.connect('mongodb://localhost/expenseManager');
+
+// Express Routes
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var expenses = require('./routes/expenses');
