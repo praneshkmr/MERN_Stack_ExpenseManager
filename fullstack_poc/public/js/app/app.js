@@ -164,7 +164,7 @@ var ExpenseList = React.createClass({
                 <table className='table table-striped'>
                     <tbody>
                         <tr>
-                            <th>Date</th>
+                            <th>Date (mm/dd/yyyy)</th>
                             <th>Title</th>
                             <th>Amount</th>
                             <th>Options</th>
@@ -178,10 +178,25 @@ var ExpenseList = React.createClass({
 });
 
 var Expense = React.createClass({
+    formatDate: function(date){
+        var d = new Date(date);
+        var dd = d.getDate();
+        var mm = d.getMonth()+1; //January is 0!
+
+        var yyyy = d.getFullYear();
+        if(dd<10){
+            dd='0'+dd
+        } 
+        if(mm<10){
+            mm='0'+mm
+        } 
+        var d = mm+'/'+dd+'/'+yyyy;
+        return d;
+    },
     render:function () {
         return(
             <tr>
-                <td>{this.props.data.date}</td>
+                <td>{this.formatDate(this.props.data.date)}</td>
                 <td>{this.props.data.title}</td>
                 <td>{this.props.data.amount}</td>
                 <td><button type="submit" className="btn btn-default" onClick={this.props.onExpenseEditClick}>Edit</button></td>
@@ -192,9 +207,24 @@ var Expense = React.createClass({
 });
 
 var ExpenseUpdate = React.createClass({
+    formatDate: function(date){
+        var d = new Date(date);
+        var dd = d.getDate();
+        var mm = d.getMonth()+1; //January is 0!
+
+        var yyyy = d.getFullYear();
+        if(dd<10){
+            dd='0'+dd
+        } 
+        if(mm<10){
+            mm='0'+mm
+        } 
+        var d = mm+'/'+dd+'/'+yyyy;
+        return d;
+    },
     getInitialState: function () {
         var expense = {
-            date : this.props.data.date,
+            date : this.formatDate(this.props.data.date),
             title: this.props.data.title,
             amount: this.props.data.amount,
             _id: this.props.data._id
@@ -219,7 +249,7 @@ var ExpenseUpdate = React.createClass({
     render:function () {
         return(
             <tr>
-                <td><input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date"/></td>
+                <td><input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date (mm/dd/yyyy)"/></td>
                 <td><input className="form-control" value={this.state.title} onChange={this.handleTitleChange} placeholder="Title"/></td>
                 <td><input className="form-control" value={this.state.amount} onChange={this.handleAmountChange} placeholder="Amount"/></td>
                 <td><button type="submit" className="btn btn-default" onClick={this.updateExpense}>Update</button></td>
@@ -265,7 +295,7 @@ var AddExpense = React.createClass({
                 <form className="form-inline" onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label className="sr-only">Date</label>
-                        <input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date"/>
+                        <input className="form-control" value={this.state.date} onChange={this.handleDateChange} placeholder="Date (mm/dd/yyyy)"/>
                     </div>
                     <div className="form-group">
                         <label className="sr-only">Title</label>
