@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
   expenseDAO.getAllExpense("",function (err, expenses) {
     if (err){ 
       console.error(err);
-      res.send(err);
+      res.status(500).send(err);
     }
     else{
       res.send(expenses);
@@ -23,7 +23,7 @@ router.get('/:id', function(req, res, next) {
     expenseDAO.getExpense(expenseId,"",function (err, expenses) {
       if (err){ 
         console.error(err);
-        res.send(err);
+        res.status(500).send(err);
       }
       else{
         res.send(expenses[0]);
@@ -44,7 +44,7 @@ router.post('/', function (req, res, next) {
     expenseDAO.addExpense(title, amount, date, user, function (err, expense) {
       if (err){ 
         console.error(err);
-        res.send(err);
+        res.status(500).send(err);
       }
       else{
         res.send(expense);
@@ -62,7 +62,7 @@ router.delete('/:id', function(req, res, next) {
     expenseDAO.deleteExpense(expenseId,"",function (err, expenses) {
       if (err){ 
         console.error(err);
-        res.send(err);
+        res.status(500).send(err);
       }
       else{
         res.send(expenses[0]);

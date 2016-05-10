@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
   userDAO.getAllUsers(function (err, users) {
     if (err){ 
       console.error(err);
-      res.send(err);
+      res.status(500).send(err);
     }
     else{
       res.send(users);
@@ -23,7 +23,7 @@ router.get('/:id', function(req, res, next) {
     userDAO.getUser(userId,function (err, users) {
       if (err){ 
         console.error(err);
-        res.send(err);
+        res.status(500).send(err);
       }
       else{
         res.send(users[0]);
@@ -42,7 +42,7 @@ router.post('/', function (req, res, next) {
   userDAO.addUser(name, email, password, function (err, user) {
     if (err){ 
         console.error(err);
-        res.send(err);
+        res.status(500).send(err);
       }
       else{
         res.send(user);
